@@ -88,3 +88,59 @@ LRESULT MainDialog::OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/,
 	this->do_CloseWindow();
 	return 0;
 }
+
+
+void __stdcall MainDialog::WindowSetLeftWeb(long Left)
+{
+	RECT	rc_wnd;
+	GetWindowRect(&rc_wnd);
+	OffsetRect(&rc_wnd, Left - rc_wnd.left, 0);
+
+	this->MoveWindow(&rc_wnd, FALSE);
+}
+
+
+void __stdcall MainDialog::WindowSetTopWeb(long Top)
+{
+	RECT	rc_wnd;
+	GetWindowRect(&rc_wnd);
+	OffsetRect(&rc_wnd, 0, Top - rc_wnd.top);
+
+	this->MoveWindow(&rc_wnd, FALSE);
+}
+
+
+void __stdcall MainDialog::WindowSetWidthWeb(long Width)
+{
+	RECT	rc_wnd, rc_client;
+	GetWindowRect(&rc_wnd);
+	GetClientRect(&rc_client);
+	const int	nc	= (rc_wnd.right - rc_wnd.left) - (rc_client.right - rc_client.left);
+
+	rc_wnd.right	= rc_wnd.left + Width + nc;
+
+	this->MoveWindow(&rc_wnd, FALSE);
+}
+
+
+void __stdcall MainDialog::WindowSetHeightWeb(long Height)
+{
+	RECT	rc_wnd, rc_client;
+	GetWindowRect(&rc_wnd);
+	GetClientRect(&rc_client);
+	const int	nc	= (rc_wnd.bottom - rc_wnd.top) - (rc_client.bottom - rc_client.top);
+
+	rc_wnd.bottom	= rc_wnd.top + Height + nc;
+
+	this->MoveWindow(&rc_wnd, FALSE);
+}
+
+
+void __stdcall MainDialog::WindowSetResizableWeb(BOOL Resizable)
+{
+	if(Resizable){
+		this->ModifyStyle(DS_MODALFRAME, WS_THICKFRAME, 0);
+	}else{
+		this->ModifyStyle(WS_THICKFRAME, DS_MODALFRAME, 0);
+	}
+}

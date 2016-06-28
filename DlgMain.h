@@ -4,7 +4,8 @@
 #include "Resource.h"
 
 class MainDialog :
-	public CAxDialogImpl<MainDialog, CAxWindow>
+	public CAxDialogImpl<MainDialog, CAxWindow>,
+	public IDispEventImpl<IDC_WEB,MainDialog>
 {
 public:
 	MainDialog(void);
@@ -22,6 +23,20 @@ private:
 	typedef	CAxDialogImpl<MainDialog, CAxWindow>	superClass;
 
 	void			do_CloseWindow();
+
+public:
+	BEGIN_SINK_MAP(MainDialog)
+		SINK_ENTRY(IDC_WEB, 264, WindowSetLeftWeb)
+		SINK_ENTRY(IDC_WEB, 265, WindowSetTopWeb)
+		SINK_ENTRY(IDC_WEB, 266, WindowSetWidthWeb)
+		SINK_ENTRY(IDC_WEB, 267, WindowSetHeightWeb)
+		SINK_ENTRY(IDC_WEB, 262, WindowSetResizableWeb)
+	END_SINK_MAP()
+	void __stdcall WindowSetLeftWeb(long Left);
+	void __stdcall WindowSetTopWeb(long Top);
+	void __stdcall WindowSetWidthWeb(long Width);
+	void __stdcall WindowSetHeightWeb(long Height);
+	void __stdcall WindowSetResizableWeb(BOOL Resizable);
 
 private:
 	BEGIN_MSG_MAP(MainDialog)
