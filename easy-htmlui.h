@@ -2,5 +2,7 @@
 
 #include "resource.h"
 
-extern	HINSTANCE		g_instace;
 extern	CComModule		g_module; 
+extern	HINSTANCE		g_instace;
+extern	HWND			g_wnd_main;
+extern	stringify_data	g_config;

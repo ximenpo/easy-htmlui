@@ -25,3 +25,4 @@
 #include <atlwin.h>
 
 // 在此处引用程序需要的其他头文件
+#include "simple/stringify.h"

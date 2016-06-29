@@ -62,6 +62,12 @@
     <ClInclude Include="..\simple-cpp-win32\inc\simple-win32\patcher.h">
       <Filter>simple-win32</Filter>
     </ClInclude>
+    <ClInclude Include="..\simple-cpp\inc\simple\stringify.h">
+      <Filter>simple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\simple-cpp\inc\simple\string.h">
+      <Filter>simple</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -84,6 +90,27 @@
     </ClCompile>
     <ClCompile Include="..\simple-cpp-win32\inc\simple-win32\patcher.cpp">
       <Filter>simple-win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\simple-cpp\inc\simple\stringify_config.cpp">
+      <Filter>simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\simple-cpp\inc\simple\stringify_ini.cpp">
+      <Filter>simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\simple-cpp\inc\simple\string.cpp">
+      <Filter>simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\simple-cpp\inc\simple\string_ex.cpp">
+      <Filter>simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\simple-cpp\inc\simple\_third_convert_utf.cpp">
+      <Filter>simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\simple-cpp\inc\simple\stringify.cpp">
+      <Filter>simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\simple-cpp\inc\simple\_third_pwgen.c">
+      <Filter>simple</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "atlwin.h"
-#include "Resource.h"
+#include "easy-htmlui.h"
 
 class MainDialog :
 	public CAxDialogImpl<MainDialog, CAxWindow>,

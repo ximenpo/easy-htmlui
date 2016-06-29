@@ -33,6 +33,7 @@ LRESULT MainDialog::OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPar
 
 LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
+	g_wnd_main	= m_hWnd;
 	if(!superClass::OnInitDialog(uMsg, wParam, lParam, bHandled)){
 		return	FALSE;
 	}
