@@ -1,14 +1,18 @@
 #include "StdAfx.h"
 #include "DlgMain.h"
 
+#include "WebCustomizer.h"
 
 MainDialog::MainDialog(void)
+	:	m_pWeb(NULL)
 {
+	WebCustomizer::patch_atl_creator_CAxHostWindow(&WebCustomizer::_CreatorClass::CreateInstance);
 }
 
 
 MainDialog::~MainDialog(void)
 {
+	WebCustomizer::unpatch_atl_creator_CAxHostWindow();
 }
 
 void	MainDialog::do_CloseWindow(){
