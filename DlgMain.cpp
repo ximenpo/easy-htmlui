@@ -2,9 +2,13 @@
 #include "DlgMain.h"
 
 #include "WebCustomizer.h"
+#include "WebExternalObject.h"
+
+#include "simple/string.h"
 
 MainDialog::MainDialog(void)
 	:	m_pWeb(NULL)
+	,	m_pExternalObject(new WebExternalObject())
 	,	m_hIcon(NULL)
 {
 	WebCustomizer::patch_atl_creator_CAxHostWindow(&WebCustomizer::_CreatorClass::CreateInstance);
@@ -20,6 +24,8 @@ MainDialog::MainDialog(void)
 
 MainDialog::~MainDialog(void)
 {
+	delete	m_pExternalObject;
+	m_pExternalObject	= NULL;
 	WebCustomizer::unpatch_atl_creator_CAxHostWindow();
 }
 
@@ -82,11 +88,27 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		this->SetIcon(m_hIcon, FALSE);
 	}
 
+	//	Resizable
+	{
+		bool resizable;
+		string_tobool(g_config.get_value("config/resizable", "0"), resizable);
+		if(resizable){
+			this->ModifyStyle(DS_MODALFRAME, WS_THICKFRAME, 0);
+		}else{
+			this->ModifyStyle(WS_THICKFRAME, DS_MODALFRAME, 0);
+		}
+	}
+
 	//	IE Control
 	{
 		m_ctrlWeb	= GetDlgItem(IDC_WEB);
 		m_ctrlWeb.QueryControl(__uuidof(IWebBrowser2), (void**)&m_pWeb);
 		m_ctrlWeb.MoveWindow(rc.left, rc.top, rc.right, rc.bottom, FALSE);
+
+		{
+			m_ctrlWeb.SetExternalDispatch(m_pExternalObject);
+			m_pWeb->put_Resizable(ATL_VARIANT_FALSE);
+		}
 
 		{
 			std::string	url	= g_config.get_value("config/homepage", "");
@@ -112,6 +134,7 @@ LRESULT MainDialog::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*
 			m_pWeb->Stop();
 			m_pWeb->Release(); 
 		}
+		m_ctrlWeb.SetExternalDispatch(NULL);
 	}
 
 	bHandled	= FALSE;
@@ -136,60 +159,4 @@ LRESULT MainDialog::OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/,
 {
 	this->do_CloseWindow();
 	return 0;
-}
-
-
-void __stdcall MainDialog::WindowSetLeftWeb(long Left)
-{
-	RECT	rc_wnd;
-	GetWindowRect(&rc_wnd);
-	OffsetRect(&rc_wnd, Left - rc_wnd.left, 0);
-
-	this->MoveWindow(&rc_wnd, FALSE);
-}
-
-
-void __stdcall MainDialog::WindowSetTopWeb(long Top)
-{
-	RECT	rc_wnd;
-	GetWindowRect(&rc_wnd);
-	OffsetRect(&rc_wnd, 0, Top - rc_wnd.top);
-
-	this->MoveWindow(&rc_wnd, FALSE);
-}
-
-
-void __stdcall MainDialog::WindowSetWidthWeb(long Width)
-{
-	RECT	rc_wnd, rc_client;
-	GetWindowRect(&rc_wnd);
-	GetClientRect(&rc_client);
-	const int	nc	= (rc_wnd.right - rc_wnd.left) - (rc_client.right - rc_client.left);
-
-	rc_wnd.right	= rc_wnd.left + Width + nc;
-
-	this->MoveWindow(&rc_wnd, FALSE);
-}
-
-
-void __stdcall MainDialog::WindowSetHeightWeb(long Height)
-{
-	RECT	rc_wnd, rc_client;
-	GetWindowRect(&rc_wnd);
-	GetClientRect(&rc_client);
-	const int	nc	= (rc_wnd.bottom - rc_wnd.top) - (rc_client.bottom - rc_client.top);
-
-	rc_wnd.bottom	= rc_wnd.top + Height + nc;
-
-	this->MoveWindow(&rc_wnd, FALSE);
-}
-
-
-void __stdcall MainDialog::WindowSetResizableWeb(BOOL Resizable)
-{
-	if(Resizable){
-		this->ModifyStyle(DS_MODALFRAME, WS_THICKFRAME, 0);
-	}else{
-		this->ModifyStyle(WS_THICKFRAME, DS_MODALFRAME, 0);
-	}
 }

@@ -76,6 +76,7 @@ int APIENTRY	_tWinMain(HINSTANCE hInstance,
 				){
 					continue;
 			}
+
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
