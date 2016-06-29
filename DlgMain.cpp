@@ -6,11 +6,64 @@
 
 #include "simple/string.h"
 
+/////////////////////////////////////////////////////////
+static	HWINEVENTHOOK	gs_hookevt_move;
+static	void CALLBACK	gs_WinEventProc_Move(
+	HWINEVENTHOOK hWinEventHook,
+	DWORD         event,
+	HWND          hwnd,
+	LONG          idObject,
+	LONG          idChild,
+	DWORD         dwEventThread,
+	DWORD         dwmsEventTime
+	)
+{
+	if(NULL != g_wnd_main && hwnd != g_wnd_main){
+		HWND	hwndP	= ::GetParent(hwnd);
+		if(hwndP != g_wnd_main && ::GetParent(hwndP) == g_wnd_main){
+			//	move the main wnd
+			RECT	rc;
+			::GetWindowRect(hwnd, &rc);
+			POINT	pt	= {rc.left, rc.top};
+			::ScreenToClient(hwndP, &pt);
+			if(0 != pt.x || 0 != pt.y){
+				::GetWindowRect(g_wnd_main, &rc);
+				::OffsetRect(&rc, pt.x - rc.left, pt.y - rc.top);
+				::MoveWindow(g_wnd_main,
+					rc.left,
+					rc.top,
+					rc.right - rc.left,
+					rc.bottom - rc.top,
+					TRUE
+					);
+				::GetClientRect(g_wnd_main, &rc);
+				::MoveWindow(hwnd, 
+					rc.left,
+					rc.top,
+					rc.right - rc.left,
+					rc.bottom - rc.top,
+					TRUE
+					);
+			}
+		}
+	}
+}
+////////////////////////////////////////////////////////////////////////
+
 MainDialog::MainDialog(void)
 	:	m_pWeb(NULL)
 	,	m_pExternalObject(new WebExternalObject())
 	,	m_hIcon(NULL)
 {
+	gs_hookevt_move	= ::SetWinEventHook(
+		EVENT_OBJECT_LOCATIONCHANGE,
+		EVENT_OBJECT_LOCATIONCHANGE,
+		0,
+		gs_WinEventProc_Move,
+		::GetCurrentProcessId(),
+		::GetCurrentThreadId(),
+		WINEVENT_OUTOFCONTEXT
+		);
 	WebCustomizer::patch_atl_creator_CAxHostWindow(&WebCustomizer::_CreatorClass::CreateInstance);
 
 	m_hIcon	= (HICON)::LoadImageA(NULL, 
@@ -26,7 +79,12 @@ MainDialog::~MainDialog(void)
 {
 	delete	m_pExternalObject;
 	m_pExternalObject	= NULL;
+
 	WebCustomizer::unpatch_atl_creator_CAxHostWindow();
+	if(NULL != gs_hookevt_move){
+		::UnhookWinEvent(gs_hookevt_move);
+		gs_hookevt_move	= NULL;
+	}
 }
 
 void	MainDialog::do_CloseWindow()
