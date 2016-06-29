@@ -5,8 +5,16 @@
 
 MainDialog::MainDialog(void)
 	:	m_pWeb(NULL)
+	,	m_hIcon(NULL)
 {
 	WebCustomizer::patch_atl_creator_CAxHostWindow(&WebCustomizer::_CreatorClass::CreateInstance);
+
+	m_hIcon	= (HICON)::LoadImageA(NULL, 
+		g_config.get_value("config/icon", "").c_str(),
+		IMAGE_ICON,
+		0, 0,
+		LR_SHARED|LR_DEFAULTSIZE|LR_LOADFROMFILE
+		);
 }
 
 
@@ -15,8 +23,36 @@ MainDialog::~MainDialog(void)
 	WebCustomizer::unpatch_atl_creator_CAxHostWindow();
 }
 
-void	MainDialog::do_CloseWindow(){
+void	MainDialog::do_CloseWindow()
+{
 	::EndDialog(m_hWnd, 0);
+}
+
+bool MainDialog::PreProcessKeyboardMessage(MSG* msg) {
+	switch(msg->wParam) {
+	case VK_TAB:
+	case VK_DELETE:
+	case VK_RETURN:
+		{
+			// handled later
+		}break;
+	default:
+		{
+			return	false;
+		}break;
+	}
+
+	CComPtr<IDispatch> disp_doc;
+	if(FAILED(m_pWeb->get_Document(&disp_doc))) {
+		return	false;
+	}
+
+	CComQIPtr<IOleInPlaceActiveObject> spInPlace;  
+	if(FAILED(disp_doc->QueryInterface(__uuidof(IOleInPlaceActiveObject), (void**)&spInPlace))) {
+		return	false;
+	}
+
+	return	(spInPlace->TranslateAccelerator(msg) == S_OK); 
 }
 
 LRESULT MainDialog::OnCloseCmd(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
@@ -33,14 +69,18 @@ LRESULT MainDialog::OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lPar
 
 LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-	g_wnd_main	= m_hWnd;
 	if(!superClass::OnInitDialog(uMsg, wParam, lParam, bHandled)){
 		return	FALSE;
 	}
-	
+
 
 	RECT rc;
 	GetClientRect(&rc);
+
+	if(NULL != m_hIcon) {
+		this->SetIcon(m_hIcon, TRUE);
+		this->SetIcon(m_hIcon, FALSE);
+	}
 
 	//	IE Control
 	{
@@ -49,7 +89,11 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		m_ctrlWeb.MoveWindow(rc.left, rc.top, rc.right, rc.bottom, FALSE);
 
 		{
-			CComVariant	sURL("about:blank");
+			std::string	url	= g_config.get_value("config/homepage", "");
+			if(url.find(":") == std::string::npos) {
+				url	= g_workdir + "\\" + url;
+			}
+			CComVariant	sURL(url.c_str());
 			m_pWeb->Navigate2(&sURL,0,0,0,0);
 		}
 	}

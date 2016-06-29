@@ -14,14 +14,19 @@ public:
 public:
 	enum	{IDD	= IDD_MAIN};
 
+	bool	PreProcessKeyboardMessage(MSG* msg);
+
 private:
 	CAxWindow		m_ctrlWeb;
 	IWebBrowser2*	m_pWeb;
-	
+
+	HICON			m_hIcon;
+
 private:
 	typedef	MainDialog								thisClass;
 	typedef	CAxDialogImpl<MainDialog, CAxWindow>	superClass;
 
+private:
 	void			do_CloseWindow();
 
 public:
@@ -50,7 +55,7 @@ private:
 	LRESULT OnCloseCmd(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
-    LRESULT OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnEraseBkgnd(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 	LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 };

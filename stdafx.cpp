@@ -7,6 +7,7 @@
 HINSTANCE		g_instace;
 HWND			g_wnd_main;
 stringify_data	g_config;
+std::string		g_workdir;
 
 //////////////////////////////////////////////////////////////////
 //	ATL Module
