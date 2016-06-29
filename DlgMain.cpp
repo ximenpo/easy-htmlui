@@ -25,7 +25,7 @@ MainDialog::~MainDialog(void)
 
 void	MainDialog::do_CloseWindow()
 {
-	::EndDialog(m_hWnd, 0);
+	DestroyWindow();
 }
 
 bool MainDialog::PreProcessKeyboardMessage(MSG* msg) {
