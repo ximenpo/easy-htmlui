@@ -2,12 +2,16 @@
 
 <body>
 <button onclick="test()">test()</button>
+<button onclick="window.moveTo(100,100)">window.moveTo</button>
+<button onclick="window.resizeTo(500,500)">window.resizeTo</button>
 
 <hr>
 <h3>Move/Size</h3>
-<button onclick="window.moveTo(100,100)">moveTo</button>
-<button onclick="window.resizeTo(500,500)">resizeTo</button>
 <button onclick="window.external.CenterWindow()">[CenterWindow]</button>
+<button onclick="window.external.MoveWindowTo(300,200)">[MoveWindowTo]</button>
+<button onclick="window.external.MoveWindowBy(50,50)">[MoveWindowBy]</button>
+<button onclick="window.external.ResizeWindowTo(500,500)">[ResizeWindowTo]</button>
+<button onclick="window.external.ResizeWindowBy(50,50)">[ResizeWindowBy]</button>
 
 <hr>
 <h3>ExecCmd</h3>

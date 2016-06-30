@@ -31,3 +31,12 @@ HRESULT STDMETHODCALLTYPE	WebCustomizer::ResizeBorder(
 	return	S_OK;
 	//return IEHostWindow::ResizeBorder(prcBorder, pUIWindow, fFrameWindow);
 }
+
+
+HRESULT STDMETHODCALLTYPE WebCustomizer::GetOptionKeyPath(
+	/* [out] */ LPOLESTR __RPC_FAR *pchKey,
+	/* [in] */ DWORD dw)
+{
+	*pchKey	= AtlAllocTaskOleString(L"SOFTWARE\\Simple\\easy-htmlui\\IE");
+	return	S_OK;
+}

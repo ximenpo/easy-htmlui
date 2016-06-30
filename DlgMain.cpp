@@ -158,8 +158,8 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	}
 
 	//	Resizable
+	bool resizable;
 	{
-		bool resizable;
 		string_tobool(g_config.get_value("config/resizable", "0"), resizable);
 		if(resizable){
 			this->ModifyStyle(DS_MODALFRAME, WS_THICKFRAME, 0);
@@ -176,7 +176,7 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
 		{
 			m_ctrlWeb.SetExternalDispatch(m_pExternalObject);
-			m_pWeb->put_Resizable(ATL_VARIANT_FALSE);
+			m_pWeb->put_Resizable(resizable ? ATL_VARIANT_TRUE : ATL_VARIANT_FALSE);
 		}
 
 		{

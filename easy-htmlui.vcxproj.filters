@@ -33,6 +33,7 @@
     <None Include="easy-htmlui.ico">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="copy-releases.cmd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

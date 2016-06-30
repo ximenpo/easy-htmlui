@@ -69,3 +69,53 @@ void	WebExternalObject::do_SaveTextFile(_variant_t file, _variant_t content, _va
 
 	ret	= os.good();
 }
+
+void	WebExternalObject::do_ResizeWindowTo(_variant_t w, _variant_t h, _variant_t& ret)
+{
+	RECT	rc_wnd, rc_client;
+	CWindow	wnd(g_wnd_main);
+	wnd.GetWindowRect(&rc_wnd);
+	wnd.GetClientRect(&rc_client);
+	const int	OX	= (rc_wnd.right - rc_wnd.left) - (rc_client.right - rc_client.left);
+	const int	OY	= (rc_wnd.bottom - rc_wnd.top) - (rc_client.bottom - rc_client.top);
+
+	rc_wnd.right	= rc_wnd.left + LONG(w) + OX;
+	rc_wnd.bottom	= rc_wnd.top + LONG(h) + OY;
+	wnd.MoveWindow(&rc_wnd, TRUE);
+
+	ret	= true;
+}
+
+void	WebExternalObject::do_ResizeWindowBy(_variant_t cx, _variant_t cy, _variant_t& ret)
+{
+	RECT	rc;
+	CWindow	wnd(g_wnd_main);
+	wnd.GetWindowRect(&rc);
+	rc.right	+= LONG(cx);
+	rc.bottom	+= LONG(cy);
+	wnd.MoveWindow(&rc, TRUE);
+
+	ret	= true;
+}
+
+void	WebExternalObject::do_MoveWindowTo(_variant_t x, _variant_t y, _variant_t& ret)
+{
+	RECT	rc;
+	CWindow	wnd(g_wnd_main);
+	wnd.GetWindowRect(&rc);
+	OffsetRect(&rc, LONG(x) - rc.left, LONG(y) - rc.top);
+	wnd.MoveWindow(&rc, TRUE);
+
+	ret	= true;
+}
+
+void	WebExternalObject::do_MoveWindowBy(_variant_t cx, _variant_t cy, _variant_t& ret)
+{
+	RECT	rc;
+	CWindow	wnd(g_wnd_main);
+	wnd.GetWindowRect(&rc);
+	OffsetRect(&rc, cx, cy);
+	wnd.MoveWindow(&rc, TRUE);
+
+	ret	= true;
+}
