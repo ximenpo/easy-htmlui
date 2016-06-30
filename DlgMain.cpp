@@ -169,7 +169,7 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		if(resizable){
 			this->ModifyStyle(DS_MODALFRAME, WS_THICKFRAME, 0);
 		}else{
-			this->ModifyStyle(WS_THICKFRAME, DS_MODALFRAME, 0);
+			this->ModifyStyle(WS_THICKFRAME | WS_MAXIMIZEBOX | WS_MINIMIZEBOX, DS_MODALFRAME, 0);
 		}
 	}
 
