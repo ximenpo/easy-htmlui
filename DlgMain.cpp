@@ -84,8 +84,8 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	}
 
 
-	RECT rc;
-	GetClientRect(&rc);
+	RECT rc_client;
+	GetClientRect(&rc_client);
 
 	if(NULL != m_hIcon) {
 		this->SetIcon(m_hIcon, TRUE);
@@ -112,7 +112,7 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 	{
 		m_ctrlWeb	= GetDlgItem(IDC_WEB);
 		m_ctrlWeb.QueryControl(__uuidof(IWebBrowser2), (void**)&m_pWeb);
-		m_ctrlWeb.MoveWindow(rc.left, rc.top, rc.right, rc.bottom, FALSE);
+		m_ctrlWeb.MoveWindow(&rc_client, TRUE);
 
 		{
 			m_ctrlWeb.SetExternalDispatch(m_pExternalObject);
@@ -153,11 +153,11 @@ LRESULT MainDialog::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*
 
 LRESULT MainDialog::OnSize(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
-	RECT rc;
-	GetClientRect(&rc);
+	RECT rc_client;
+	GetClientRect(&rc_client);
 
 	if(m_ctrlWeb.m_hWnd){
-		m_ctrlWeb.MoveWindow(rc.left, rc.top, rc.right, rc.bottom, FALSE);
+		m_ctrlWeb.MoveWindow(&rc_client, TRUE);
 	}
 
 	return 0;
