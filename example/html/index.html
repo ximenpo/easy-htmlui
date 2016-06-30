@@ -1,15 +1,24 @@
 <html>
 
 <body>
-<button onclick="test()">test()</button><br>
-<button onclick="window.moveTo(100,100)">moveTo</button><br>
-<button onclick="window.resizeTo(500,500)">resizeTo</button><br>
-<button onclick="window.external.CenterWindow()">external.CenterWindow</button><br>
+<button onclick="test()">test()</button>
 
 <hr>
-<button onclick="exec_echo('hello, wolrd!')">echo</button><br>
-<hr>
+<h3>Move/Size</h3>
+<button onclick="window.moveTo(100,100)">moveTo</button>
+<button onclick="window.resizeTo(500,500)">resizeTo</button>
+<button onclick="window.external.CenterWindow()">[CenterWindow]</button>
 
+<hr>
+<h3>ExecCmd</h3>
+<button onclick="exec_echo('hello, wolrd!')">[ExecCmd]</button>
+
+<hr>
+<h3>LoadTextFile/SaveTextFile</h3>
+<button onclick="load_file('test.txt')">[LoadTextFile]</button>
+<button onclick="save_file('test.txt', 'test only!')">[SaveTextFile]</button>
+
+<hr>
 <input value="12345"></input>
 <input value="67890"></input>
 
@@ -21,6 +30,12 @@
 	function	exec_echo(param){
 		var	ret	= window.external.ExecCmd('echo.cmd "' + param + '"', 1);
 		alert(ret?'Exec -> ³É¹¦':'Exec -> Ê§°Ü');
+	}
+	function	load_file(file){
+		alert(window.external.LoadTextFile(file));
+	}
+	function	save_file(file, content){
+		alert(window.external.SaveTextFile(file, content));
 	}
 //-->
 </script>

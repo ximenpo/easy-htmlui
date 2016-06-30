@@ -11,8 +11,10 @@ public:
 
 private:
 	DISPATCH_ITEMS_BEGIN(WebExternalObject)
-		DISPATCH_FUNCTION(101,L"CenterWindow", do_CenterWindow)
-		DISPATCH_FUNCTION(102,L"ExecCmd", do_ExecCmd)
+		DISPATCH_FUNCTION(101,L"CenterWindow",	do_CenterWindow)
+		DISPATCH_FUNCTION(201,L"ExecCmd",		do_ExecCmd)
+		DISPATCH_FUNCTION(301,L"LoadTextFile",	do_LoadTextFile)
+		DISPATCH_FUNCTION(302,L"SaveTextFile",	do_SaveTextFile)
 		DISPATCH_ITEMS_END()
 
 private:
@@ -21,5 +23,7 @@ private:
 
 	void	do_CenterWindow(_variant_t& ret);
 	void	do_ExecCmd(_variant_t cmdline, _variant_t wnd_show, _variant_t& ret);
+	void	do_LoadTextFile(_variant_t file, _variant_t& ret);
+	void	do_SaveTextFile(_variant_t file, _variant_t content, _variant_t& ret);
 };
 
