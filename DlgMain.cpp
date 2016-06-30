@@ -157,6 +157,11 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		this->SetIcon(m_hIcon, FALSE);
 	}
 
+	//	Title
+	{
+		SetWindowTextA(m_hWnd, g_config.get_value("config/title", "0").c_str());
+	}
+
 	//	Resizable
 	bool resizable;
 	{
