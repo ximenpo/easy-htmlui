@@ -76,11 +76,11 @@ void	WebExternalObject::do_ResizeWindowTo(_variant_t w, _variant_t h, _variant_t
 	CWindow	wnd(g_wnd_main);
 	wnd.GetWindowRect(&rc_wnd);
 	wnd.GetClientRect(&rc_client);
-	const int	OX	= (rc_wnd.right - rc_wnd.left) - (rc_client.right - rc_client.left);
-	const int	OY	= (rc_wnd.bottom - rc_wnd.top) - (rc_client.bottom - rc_client.top);
+	const LONG	OW	= (rc_wnd.right - rc_wnd.left) - (rc_client.right - rc_client.left);
+	const LONG	OH	= (rc_wnd.bottom - rc_wnd.top) - (rc_client.bottom - rc_client.top);
 
-	rc_wnd.right	= rc_wnd.left + LONG(w) + OX;
-	rc_wnd.bottom	= rc_wnd.top + LONG(h) + OY;
+	rc_wnd.right	= rc_wnd.left	+ LONG(w)	+ OW;
+	rc_wnd.bottom	= rc_wnd.top	+ LONG(h)	+ OH;
 	wnd.MoveWindow(&rc_wnd, TRUE);
 
 	ret	= true;
