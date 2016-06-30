@@ -6,76 +6,14 @@
 
 #include "simple/string.h"
 
-/////////////////////////////////////////////////////////
-static	HWINEVENTHOOK	gs_hookevt_move;
-static	void CALLBACK	gs_WinEventProc_Move(
-	HWINEVENTHOOK hWinEventHook,
-	DWORD         event,
-	HWND          hwnd,
-	LONG          idObject,
-	LONG          idChild,
-	DWORD         dwEventThread,
-	DWORD         dwmsEventTime
-	)
-{
-	if(NULL == g_wnd_main || hwnd == g_wnd_main){
-		return;
-	}
-
-	char	buf[MAX_PATH]	= {0};
-	GetClassNameA(hwnd, buf, sizeof(buf)/sizeof(buf[0]) - 1);
-	if(0 != _strcmpi(buf, "Shell Embedding")) {
-		return;
-	}
-
-	HWND	hwndP	= ::GetParent(hwnd);
-	if(::GetParent(hwndP) != g_wnd_main){
-		return;
-	}
-
-	//	move the main wnd
-	RECT	rc;
-	::GetWindowRect(hwnd, &rc);
-	POINT	pt	= {rc.left, rc.top};
-	::ScreenToClient(hwndP, &pt);
-
-	if(0 != pt.x || 0 != pt.y){
-		::GetWindowRect(g_wnd_main, &rc);
-		::OffsetRect(&rc, pt.x - rc.left, pt.y - rc.top);
-		::MoveWindow(g_wnd_main,
-			rc.left,
-			rc.top,
-			rc.right - rc.left,
-			rc.bottom - rc.top,
-			TRUE
-			);
-		::GetClientRect(g_wnd_main, &rc);
-		::MoveWindow(hwnd, 
-			rc.left,
-			rc.top,
-			rc.right - rc.left,
-			rc.bottom - rc.top,
-			TRUE
-			);
-	}
-}
-////////////////////////////////////////////////////////////////////////
-
 MainDialog::MainDialog(void)
 	:	m_pWeb(NULL)
 	,	m_pExternalObject(new WebExternalObject())
 	,	m_hIcon(NULL)
 {
-	gs_hookevt_move	= ::SetWinEventHook(
-		EVENT_OBJECT_LOCATIONCHANGE,
-		EVENT_OBJECT_LOCATIONCHANGE,
-		0,
-		gs_WinEventProc_Move,
-		::GetCurrentProcessId(),
-		::GetCurrentThreadId(),
-		WINEVENT_OUTOFCONTEXT
-		);
+#ifdef	NDEBUG
 	WebCustomizer::patch_atl_creator_CAxHostWindow(&WebCustomizer::_CreatorClass::CreateInstance);
+#endif
 
 	m_hIcon	= (HICON)::LoadImageA(NULL, 
 		g_config.get_value("config/icon", "").c_str(),
@@ -85,17 +23,14 @@ MainDialog::MainDialog(void)
 		);
 }
 
-
 MainDialog::~MainDialog(void)
 {
 	delete	m_pExternalObject;
 	m_pExternalObject	= NULL;
-
+	
+#ifdef	NDEBUG
 	WebCustomizer::unpatch_atl_creator_CAxHostWindow();
-	if(NULL != gs_hookevt_move){
-		::UnhookWinEvent(gs_hookevt_move);
-		gs_hookevt_move	= NULL;
-	}
+#endif
 }
 
 void	MainDialog::do_CloseWindow()
