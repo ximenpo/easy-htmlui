@@ -6,13 +6,21 @@
 <button onclick="window.resizeTo(500,500)">resizeTo</button><br>
 <button onclick="window.external.CenterWindow()">external.CenterWindow</button><br>
 
+<hr>
+<button onclick="exec_echo('hello, wolrd!')">echo</button><br>
+<hr>
+
 <input value="12345"></input>
 <input value="67890"></input>
 
 <script type="text/javascript">
 <!--
 	function	test(){
-		//alert();
+		alert(typeof window.external.Exec);
+	}
+	function	exec_echo(param){
+		var	ret	= window.external.ExecCmd('echo.cmd "' + param + '"', 1);
+		alert(ret?'Exec -> ³É¹¦':'Exec -> Ê§°Ü');
 	}
 //-->
 </script>

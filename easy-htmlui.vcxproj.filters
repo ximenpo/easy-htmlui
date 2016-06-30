@@ -68,6 +68,9 @@
     <ClInclude Include="..\simple-cpp\inc\simple\string.h">
       <Filter>simple</Filter>
     </ClInclude>
+    <ClInclude Include="..\simple-cpp-win32\inc\simple-win32\exec.h">
+      <Filter>simple-win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -111,6 +114,9 @@
     </ClCompile>
     <ClCompile Include="..\simple-cpp\inc\simple\_third_pwgen.c">
       <Filter>simple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\simple-cpp-win32\inc\simple-win32\exec.cpp">
+      <Filter>simple-win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

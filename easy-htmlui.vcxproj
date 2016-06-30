@@ -54,6 +54,7 @@
       <AdditionalIncludeDirectories>..\simple-cpp\inc;..\simple-cpp-win32\inc;</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -87,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\simple-cpp-win32\inc\simple-win32\atl\IEHostWindow.h" />
+    <ClInclude Include="..\simple-cpp-win32\inc\simple-win32\exec.h" />
     <ClInclude Include="..\simple-cpp-win32\inc\simple-win32\patcher.h" />
     <ClInclude Include="..\simple-cpp\inc\simple\string.h" />
     <ClInclude Include="..\simple-cpp\inc\simple\stringify.h" />
@@ -100,6 +102,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\simple-cpp-win32\inc\simple-win32\atl\IEHostWindow.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\simple-cpp-win32\inc\simple-win32\exec.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>

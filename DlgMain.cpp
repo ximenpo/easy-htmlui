@@ -18,34 +18,45 @@ static	void CALLBACK	gs_WinEventProc_Move(
 	DWORD         dwmsEventTime
 	)
 {
-	if(NULL != g_wnd_main && hwnd != g_wnd_main){
-		HWND	hwndP	= ::GetParent(hwnd);
-		if(hwndP != g_wnd_main && ::GetParent(hwndP) == g_wnd_main){
-			//	move the main wnd
-			RECT	rc;
-			::GetWindowRect(hwnd, &rc);
-			POINT	pt	= {rc.left, rc.top};
-			::ScreenToClient(hwndP, &pt);
-			if(0 != pt.x || 0 != pt.y){
-				::GetWindowRect(g_wnd_main, &rc);
-				::OffsetRect(&rc, pt.x - rc.left, pt.y - rc.top);
-				::MoveWindow(g_wnd_main,
-					rc.left,
-					rc.top,
-					rc.right - rc.left,
-					rc.bottom - rc.top,
-					TRUE
-					);
-				::GetClientRect(g_wnd_main, &rc);
-				::MoveWindow(hwnd, 
-					rc.left,
-					rc.top,
-					rc.right - rc.left,
-					rc.bottom - rc.top,
-					TRUE
-					);
-			}
-		}
+	if(NULL == g_wnd_main || hwnd == g_wnd_main){
+		return;
+	}
+
+	char	buf[MAX_PATH]	= {0};
+	GetClassNameA(hwnd, buf, sizeof(buf)/sizeof(buf[0]) - 1);
+	if(0 != _strcmpi(buf, "Shell Embedding")) {
+		return;
+	}
+
+	HWND	hwndP	= ::GetParent(hwnd);
+	if(::GetParent(hwndP) != g_wnd_main){
+		return;
+	}
+
+	//	move the main wnd
+	RECT	rc;
+	::GetWindowRect(hwnd, &rc);
+	POINT	pt	= {rc.left, rc.top};
+	::ScreenToClient(hwndP, &pt);
+
+	if(0 != pt.x || 0 != pt.y){
+		::GetWindowRect(g_wnd_main, &rc);
+		::OffsetRect(&rc, pt.x - rc.left, pt.y - rc.top);
+		::MoveWindow(g_wnd_main,
+			rc.left,
+			rc.top,
+			rc.right - rc.left,
+			rc.bottom - rc.top,
+			TRUE
+			);
+		::GetClientRect(g_wnd_main, &rc);
+		::MoveWindow(hwnd, 
+			rc.left,
+			rc.top,
+			rc.right - rc.left,
+			rc.bottom - rc.top,
+			TRUE
+			);
 	}
 }
 ////////////////////////////////////////////////////////////////////////
