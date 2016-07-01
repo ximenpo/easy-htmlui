@@ -6,12 +6,19 @@
 <button onclick="window.resizeTo(500,500)">window.resizeTo</button>
 
 <hr>
+<h3>Properties</h3>
+<button onclick="alert(window.external.Caption)">get [Caption]</button>
+<button onclick="window.external.Caption += '~'">set [Caption]</button>
+
+<hr>
 <h3>Move/Size</h3>
-<button onclick="window.external.CenterWindow()">[CenterWindow]</button>
-<button onclick="window.external.MoveWindowTo(300,200)">[MoveWindowTo]</button>
-<button onclick="window.external.MoveWindowBy(50,50)">[MoveWindowBy]</button>
-<button onclick="window.external.ResizeWindowTo(500,500)">[ResizeWindowTo]</button>
-<button onclick="window.external.ResizeWindowBy(50,50)">[ResizeWindowBy]</button>
+<button onclick="window.external.MoveTo(300,200)">[MoveTo]</button>
+<button onclick="window.external.MoveBy(50,50)">[MoveBy]</button>
+<br>
+<button onclick="window.external.ResizeTo(500,500)">[ResizeTo]</button>
+<button onclick="window.external.ResizeBy(50,50)">[ResizeBy]</button>
+<br>
+<button onclick="window.external.MoveCenter()">[MoveCenter]</button>
 
 <hr>
 <h3>ExecCmd</h3>

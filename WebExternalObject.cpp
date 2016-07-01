@@ -28,10 +28,20 @@ void	WebExternalObject::do_AlwaysFalse(_variant_t& ret)
 	ret	= false;
 }
 
-void	WebExternalObject::do_CenterWindow(_variant_t& ret)
+void	WebExternalObject::do_GetCaption(_variant_t& ret)
 {
-	CWindow	wnd(g_wnd_main);
-	wnd.CenterWindow();
+	CComBSTR	caption;
+	CWindow		wnd(g_wnd_main);
+	wnd.GetWindowTextW(&caption);
+
+	ret	= caption;
+}
+
+void	WebExternalObject::do_SetCaption(_variant_t caption)
+{
+	CComBSTR	scmd(caption.bstrVal);
+	CWindow		wnd(g_wnd_main);
+	wnd.SetWindowTextW(scmd);
 }
 
 void	WebExternalObject::do_ExecCmd(_variant_t cmdline, _variant_t wnd_show, _variant_t& ret)
@@ -56,7 +66,7 @@ void	WebExternalObject::do_LoadTextFile(_variant_t file, _variant_t& ret)
     }
 
 	CComBSTR	str(string_ansi_to_wchar(std::string(data.get(), size)));
-	ret	= str.Detach();
+	ret	= str;
 }
 
 void	WebExternalObject::do_SaveTextFile(_variant_t file, _variant_t content, _variant_t& ret)
@@ -70,7 +80,7 @@ void	WebExternalObject::do_SaveTextFile(_variant_t file, _variant_t content, _va
 	ret	= os.good();
 }
 
-void	WebExternalObject::do_ResizeWindowTo(_variant_t w, _variant_t h, _variant_t& ret)
+void	WebExternalObject::do_ResizeTo(_variant_t w, _variant_t h, _variant_t& ret)
 {
 	RECT	rc_wnd, rc_client;
 	CWindow	wnd(g_wnd_main);
@@ -86,7 +96,7 @@ void	WebExternalObject::do_ResizeWindowTo(_variant_t w, _variant_t h, _variant_t
 	ret	= true;
 }
 
-void	WebExternalObject::do_ResizeWindowBy(_variant_t cx, _variant_t cy, _variant_t& ret)
+void	WebExternalObject::do_ResizeBy(_variant_t cx, _variant_t cy, _variant_t& ret)
 {
 	RECT	rc;
 	CWindow	wnd(g_wnd_main);
@@ -98,7 +108,7 @@ void	WebExternalObject::do_ResizeWindowBy(_variant_t cx, _variant_t cy, _variant
 	ret	= true;
 }
 
-void	WebExternalObject::do_MoveWindowTo(_variant_t x, _variant_t y, _variant_t& ret)
+void	WebExternalObject::do_MoveTo(_variant_t x, _variant_t y, _variant_t& ret)
 {
 	RECT	rc;
 	CWindow	wnd(g_wnd_main);
@@ -109,7 +119,7 @@ void	WebExternalObject::do_MoveWindowTo(_variant_t x, _variant_t y, _variant_t& 
 	ret	= true;
 }
 
-void	WebExternalObject::do_MoveWindowBy(_variant_t cx, _variant_t cy, _variant_t& ret)
+void	WebExternalObject::do_MoveBy(_variant_t cx, _variant_t cy, _variant_t& ret)
 {
 	RECT	rc;
 	CWindow	wnd(g_wnd_main);
@@ -118,4 +128,10 @@ void	WebExternalObject::do_MoveWindowBy(_variant_t cx, _variant_t cy, _variant_t
 	wnd.MoveWindow(&rc, TRUE);
 
 	ret	= true;
+}
+
+void	WebExternalObject::do_MoveCenter(_variant_t& ret)
+{
+	CWindow	wnd(g_wnd_main);
+	wnd.CenterWindow();
 }
