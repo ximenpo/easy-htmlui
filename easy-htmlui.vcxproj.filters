@@ -27,12 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="small.ico">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="easy-htmlui.ico">
-      <Filter>资源文件</Filter>
-    </None>
     <None Include="copy-releases.cmd" />
   </ItemGroup>
   <ItemGroup>

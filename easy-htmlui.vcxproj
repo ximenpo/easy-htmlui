@@ -85,8 +85,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="copy-releases.cmd" />
-    <None Include="easy-htmlui.ico" />
-    <None Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\simple-cpp-win32\inc\simple-win32\atl\IEHostWindow.h" />

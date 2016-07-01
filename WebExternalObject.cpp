@@ -4,12 +4,14 @@
 #include <fstream>
 
 #include "easy-htmlui.h"
+#include "DlgMain.h"
 
 #include "simple/string.h"
 #include "simple-win32/exec.h"
 #include "simple-win32/res.h"
 
-WebExternalObject::WebExternalObject(void)
+WebExternalObject::WebExternalObject(MainDialog* main_dlg)
+	:	m_dlg(main_dlg)
 {
 }
 
@@ -28,30 +30,28 @@ void	WebExternalObject::do_AlwaysFalse(_variant_t& ret)
 	ret	= false;
 }
 
-void	WebExternalObject::do_GetCaption(_variant_t& ret)
+void	WebExternalObject::GetCaption(_variant_t& ret)
 {
 	CComBSTR	caption;
-	CWindow		wnd(g_wnd_main);
-	wnd.GetWindowTextW(&caption);
+	m_dlg->GetWindowTextW(&caption);
 
 	ret	= caption;
 }
 
-void	WebExternalObject::do_SetCaption(_variant_t caption)
+void	WebExternalObject::SetCaption(_variant_t caption)
 {
 	CComBSTR	scmd(caption.bstrVal);
-	CWindow		wnd(g_wnd_main);
-	wnd.SetWindowTextW(scmd);
+	m_dlg->SetWindowTextW(scmd);
 }
 
-void	WebExternalObject::do_ExecCmd(_variant_t cmdline, _variant_t wnd_show, _variant_t& ret)
+void	WebExternalObject::ExecCmd(_variant_t cmdline, _variant_t wnd_show, _variant_t& ret)
 {
 	CComBSTR	scmd(cmdline.bstrVal);
 	WORD		nshow	= wnd_show;
 	ret	=	(FALSE != ExecApp(scmd, nshow));
 }
 
-void	WebExternalObject::do_LoadTextFile(_variant_t file, _variant_t& ret)
+void	WebExternalObject::LoadTextFile(_variant_t file, _variant_t& ret)
 {
 	ret	= "";
 	std::wstring	sfile(file.bstrVal);
@@ -69,7 +69,7 @@ void	WebExternalObject::do_LoadTextFile(_variant_t file, _variant_t& ret)
 	ret	= str;
 }
 
-void	WebExternalObject::do_SaveTextFile(_variant_t file, _variant_t content, _variant_t& ret)
+void	WebExternalObject::SaveTextFile(_variant_t file, _variant_t content, _variant_t& ret)
 {
 	std::wstring	sfile(file.bstrVal), scontent(content.bstrVal);
 	std::ofstream	os(string_wchar_to_ansi(sfile));
@@ -80,58 +80,54 @@ void	WebExternalObject::do_SaveTextFile(_variant_t file, _variant_t content, _va
 	ret	= os.good();
 }
 
-void	WebExternalObject::do_ResizeTo(_variant_t w, _variant_t h, _variant_t& ret)
+void	WebExternalObject::ResizeTo(_variant_t w, _variant_t h, _variant_t& ret)
 {
 	RECT	rc_wnd, rc_client;
-	CWindow	wnd(g_wnd_main);
-	wnd.GetWindowRect(&rc_wnd);
-	wnd.GetClientRect(&rc_client);
+	m_dlg->GetWindowRect(&rc_wnd);
+	m_dlg->GetClientRect(&rc_client);
+
 	const LONG	OW	= (rc_wnd.right - rc_wnd.left) - (rc_client.right - rc_client.left);
 	const LONG	OH	= (rc_wnd.bottom - rc_wnd.top) - (rc_client.bottom - rc_client.top);
 
 	rc_wnd.right	= rc_wnd.left	+ LONG(w)	+ OW;
 	rc_wnd.bottom	= rc_wnd.top	+ LONG(h)	+ OH;
-	wnd.MoveWindow(&rc_wnd, TRUE);
+	m_dlg->MoveWindow(&rc_wnd, TRUE);
 
 	ret	= true;
 }
 
-void	WebExternalObject::do_ResizeBy(_variant_t cx, _variant_t cy, _variant_t& ret)
+void	WebExternalObject::ResizeBy(_variant_t cx, _variant_t cy, _variant_t& ret)
 {
 	RECT	rc;
-	CWindow	wnd(g_wnd_main);
-	wnd.GetWindowRect(&rc);
+	m_dlg->GetWindowRect(&rc);
 	rc.right	+= LONG(cx);
 	rc.bottom	+= LONG(cy);
-	wnd.MoveWindow(&rc, TRUE);
+	m_dlg->MoveWindow(&rc, TRUE);
 
 	ret	= true;
 }
 
-void	WebExternalObject::do_MoveTo(_variant_t x, _variant_t y, _variant_t& ret)
+void	WebExternalObject::MoveTo(_variant_t x, _variant_t y, _variant_t& ret)
 {
 	RECT	rc;
-	CWindow	wnd(g_wnd_main);
-	wnd.GetWindowRect(&rc);
+	m_dlg->GetWindowRect(&rc);
 	OffsetRect(&rc, LONG(x) - rc.left, LONG(y) - rc.top);
-	wnd.MoveWindow(&rc, TRUE);
+	m_dlg->MoveWindow(&rc, TRUE);
 
 	ret	= true;
 }
 
-void	WebExternalObject::do_MoveBy(_variant_t cx, _variant_t cy, _variant_t& ret)
+void	WebExternalObject::MoveBy(_variant_t cx, _variant_t cy, _variant_t& ret)
 {
 	RECT	rc;
-	CWindow	wnd(g_wnd_main);
-	wnd.GetWindowRect(&rc);
+	m_dlg->GetWindowRect(&rc);
 	OffsetRect(&rc, cx, cy);
-	wnd.MoveWindow(&rc, TRUE);
+	m_dlg->MoveWindow(&rc, TRUE);
 
 	ret	= true;
 }
 
-void	WebExternalObject::do_MoveCenter(_variant_t& ret)
+void	WebExternalObject::MoveCenter(_variant_t& ret)
 {
-	CWindow	wnd(g_wnd_main);
-	wnd.CenterWindow();
+	m_dlg->CenterWindow();
 }

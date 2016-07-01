@@ -8,10 +8,11 @@
 
 MainDialog::MainDialog(void)
 	:	m_pWeb(NULL)
-	,	m_pExternalObject(new WebExternalObject())
+	,	m_pExternalObject(new WebExternalObject(this))
 	,	m_hIcon(NULL)
 {
 #ifdef	NDEBUG
+	//	will error if DEP enabled.
 	WebCustomizer::patch_atl_creator_CAxHostWindow(&WebCustomizer::_CreatorClass::CreateInstance);
 #endif
 
@@ -28,9 +29,7 @@ MainDialog::~MainDialog(void)
 	delete	m_pExternalObject;
 	m_pExternalObject	= NULL;
 	
-#ifdef	NDEBUG
 	WebCustomizer::unpatch_atl_creator_CAxHostWindow();
-#endif
 }
 
 void	MainDialog::do_CloseWindow()
@@ -83,6 +82,7 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		return	FALSE;
 	}
 
+	this->ShowWindow(SW_HIDE);
 
 	RECT rc_client;
 	GetClientRect(&rc_client);
@@ -106,6 +106,16 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 		}else{
 			this->ModifyStyle(WS_THICKFRAME | WS_MAXIMIZEBOX | WS_MINIMIZEBOX, DS_MODALFRAME, 0);
 		}
+	}
+
+	//	Size
+	{
+		SIZE	size;
+		if(string_tonumbers(g_config.get_value("config/default_size", ""), size.cx, size.cy)){
+			variant_t	v;
+			m_pExternalObject->ResizeTo(size.cx, size.cy, v);
+		}
+		this->CenterWindow();
 	}
 
 	//	IE Control
