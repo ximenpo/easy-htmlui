@@ -28,7 +28,7 @@ MainDialog::~MainDialog(void)
 {
 	delete	m_pExternalObject;
 	m_pExternalObject	= NULL;
-	
+
 	WebCustomizer::unpatch_atl_creator_CAxHostWindow();
 }
 
@@ -84,9 +84,6 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
 	this->ShowWindow(SW_HIDE);
 
-	RECT rc_client;
-	GetClientRect(&rc_client);
-
 	if(NULL != m_hIcon) {
 		this->SetIcon(m_hIcon, TRUE);
 		this->SetIcon(m_hIcon, FALSE);
@@ -120,6 +117,9 @@ LRESULT MainDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
 	//	IE Control
 	{
+		RECT rc_client;
+		GetClientRect(&rc_client);
+
 		m_ctrlWeb	= GetDlgItem(IDC_WEB);
 		m_ctrlWeb.QueryControl(__uuidof(IWebBrowser2), (void**)&m_pWeb);
 		m_ctrlWeb.MoveWindow(&rc_client, TRUE);
