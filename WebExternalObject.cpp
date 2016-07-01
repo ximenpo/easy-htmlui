@@ -98,7 +98,7 @@ void	WebExternalObject::LoadTextFile(_variant_t file, _variant_t& ret)
         return;
     }
 
-	CComBSTR	str(string_ansi_to_wchar(std::string(data.get(), size)));
+	CComBSTR	str(std::string(data.get(), size).c_str());
 	ret	= str;
 }
 
