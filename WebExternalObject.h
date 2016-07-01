@@ -23,6 +23,9 @@ public:
 	void	MoveTo(_variant_t x, _variant_t y, _variant_t& ret);
 	void	MoveBy(_variant_t cx, _variant_t cy, _variant_t& ret);
 	void	MoveCenter(_variant_t& ret);
+	void	MaximizeWindow(_variant_t& ret);
+	void	RestoreWindow(_variant_t& ret);
+	void	MinimizeWindow(_variant_t& ret);
 
 private:
 	DISPATCH_ITEMS_BEGIN(WebExternalObject)
@@ -32,6 +35,9 @@ private:
 		DISPATCH_FUNCTION(203,	L"MoveTo",			MoveTo)
 		DISPATCH_FUNCTION(204,	L"MoveBy",			MoveBy)
 		DISPATCH_FUNCTION(205,	L"MoveCenter",		MoveCenter)
+		DISPATCH_FUNCTION(211,	L"MaximizeWindow",	MaximizeWindow)
+		DISPATCH_FUNCTION(212,	L"RestoreWindow",	RestoreWindow)
+		DISPATCH_FUNCTION(213,	L"MinimizeWindow",	MinimizeWindow)
 		DISPATCH_FUNCTION(301,	L"ExecCmd",			ExecCmd)
 		DISPATCH_FUNCTION(401,	L"LoadTextFile",	LoadTextFile)
 		DISPATCH_FUNCTION(402,	L"SaveTextFile",	SaveTextFile)

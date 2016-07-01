@@ -131,3 +131,18 @@ void	WebExternalObject::MoveCenter(_variant_t& ret)
 {
 	m_dlg->CenterWindow();
 }
+
+void	WebExternalObject::MaximizeWindow(_variant_t& ret)
+{
+	m_dlg->ShowWindow(SW_MAXIMIZE);
+}
+
+void	WebExternalObject::RestoreWindow(_variant_t& ret)
+{
+	m_dlg->ShowWindow(SW_RESTORE);
+}
+
+void	WebExternalObject::MinimizeWindow(_variant_t& ret)
+{
+	m_dlg->ShowWindow(SW_MINIMIZE);
+}
