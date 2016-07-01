@@ -26,7 +26,8 @@
 
 <hr>
 <h3>ExecCmd</h3>
-<button onclick="exec_echo('hello, wolrd!')">[ExecCmd]</button>
+<button onclick="run_echo('hello, wolrd!')">[Run]</button>
+<button onclick="run_dir('.cmd')">[Exec]</button>
 
 <hr>
 <h3>LoadTextFile/SaveTextFile</h3>
@@ -42,9 +43,14 @@
 	function	test(){
 		//alert(typeof window.external.ExecCmd);
 	}
-	function	exec_echo(param){
-		var	ret	= window.external.ExecCmd('echo.cmd "' + param + '"', 1);
+	function	run_echo(param){
+		var	ret	= window.external.Run('echo.cmd "' + param + '"', 1);
 		alert(ret?'Exec -> ³É¹¦':'Exec -> Ê§°Ü');
+	}
+	function	run_dir(param){
+		var	ret	= window.external.Exec('dir.cmd "' + param + '"', -1);
+		alert(ret);
+		alert(window.external.Exec_Result + "=>" + window.external.Exec_ErrMsg);
 	}
 	function	load_file(file){
 		alert(window.external.LoadTextFile(file));

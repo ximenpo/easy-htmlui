@@ -22,9 +22,6 @@
     <Filter Include="simple-win32\atl">
       <UniqueIdentifier>{c2265bb0-8496-4342-862c-620831203c42}</UniqueIdentifier>
     </Filter>
-    <Filter Include="simple-win32\gdiplus">
-      <UniqueIdentifier>{4db65039-b3a2-475e-a13f-627257f9f340}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="copy-releases.cmd" />

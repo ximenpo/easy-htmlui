@@ -12,6 +12,7 @@
 
 WebExternalObject::WebExternalObject(MainDialog* main_dlg)
 	:	m_dlg(main_dlg)
+	,	m_exec_result(0)
 {
 }
 
@@ -44,11 +45,43 @@ void	WebExternalObject::SetCaption(_variant_t caption)
 	m_dlg->SetWindowTextW(scmd);
 }
 
-void	WebExternalObject::ExecCmd(_variant_t cmdline, _variant_t wnd_show, _variant_t& ret)
+void	WebExternalObject::GetExecErrMsg(_variant_t& ret)
+{
+	ret	= m_exec_error.c_str();
+}
+
+void	WebExternalObject::GetExecResult(_variant_t& ret)
+{
+	ret	= m_exec_result;
+}
+
+void	WebExternalObject::Run(_variant_t cmdline, _variant_t wnd_show, _variant_t& ret)
 {
 	CComBSTR	scmd(cmdline.bstrVal);
 	WORD		nshow	= wnd_show;
-	ret	=	(FALSE != ExecApp(scmd, nshow));
+	ret	=	(FALSE != Exec_Cmd(scmd, nshow));
+}
+
+void	WebExternalObject::Exec(_variant_t cmdline, _variant_t timeout, _variant_t& ret)
+{
+	CComBSTR	scmd(cmdline.bstrVal);
+	std::string	api_error, std_output;
+	DWORD		u32_FirstConvert	= 0;
+
+	m_exec_error.clear();
+	m_exec_result	= Exec_App(
+		string_wchar_to_ansi(scmd.operator LPWSTR()),
+		u32_FirstConvert,	// IN
+		g_workdir.c_str(),
+		NULL,
+		TRUE,
+		DWORD(timeout),
+		&api_error,
+		&std_output,
+		&m_exec_error
+		);
+
+	ret	=	std_output.c_str();
 }
 
 void	WebExternalObject::LoadTextFile(_variant_t file, _variant_t& ret)

@@ -1,0 +1,1 @@
+@dir /O:N | findstr "%1"
