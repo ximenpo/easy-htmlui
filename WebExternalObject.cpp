@@ -88,6 +88,12 @@ void	WebExternalObject::LoadTextFile(_variant_t file, _variant_t& ret)
 {
 	ret	= "";
 	std::wstring	sfile(file.bstrVal);
+	if(sfile.find(L':') == std::wstring::npos){
+		std::wstring	sbuf(string_ansi_to_wchar(g_workdir));
+		sbuf.append(L"\\");
+		sbuf.append(sfile);
+		sfile	=  sbuf;
+	}
 
     size_t	size	= 0;
     if(!Res_LoadFile(string_wchar_to_ansi(sfile), NULL, size)) {
@@ -104,7 +110,15 @@ void	WebExternalObject::LoadTextFile(_variant_t file, _variant_t& ret)
 
 void	WebExternalObject::SaveTextFile(_variant_t file, _variant_t content, _variant_t& ret)
 {
-	std::wstring	sfile(file.bstrVal), scontent(content.bstrVal);
+	std::wstring	sfile(file.bstrVal);
+	if(sfile.find(L':') == std::wstring::npos){
+		std::wstring	sbuf(string_ansi_to_wchar(g_workdir));
+		sbuf.append(L"\\");
+		sbuf.append(sfile);
+		sfile	=  sbuf;
+	}
+
+	std::wstring	scontent(content.bstrVal);
 	std::ofstream	os(string_wchar_to_ansi(sfile));
 	if(os){
 		os << string_wchar_to_ansi(scontent);
