@@ -11,10 +11,7 @@ MainDialog::MainDialog(void)
 	,	m_pExternalObject(new WebExternalObject(this))
 	,	m_hIcon(NULL)
 {
-#ifdef	NDEBUG
-	//	will error if DEP enabled.
 	WebCustomizer::patch_atl_creator_CAxHostWindow(&WebCustomizer::_CreatorClass::CreateInstance);
-#endif
 
 	m_hIcon	= (HICON)::LoadImageA(NULL, 
 		g_config.get_value("config/icon", "").c_str(),
