@@ -35,19 +35,6 @@ void	MainDialog::do_CloseWindow()
 }
 
 bool MainDialog::PreProcessKeyboardMessage(MSG* msg) {
-	switch(msg->wParam) {
-	case VK_TAB:
-	case VK_DELETE:
-	case VK_RETURN:
-		{
-			// handled later
-		}break;
-	default:
-		{
-			return	false;
-		}break;
-	}
-
 	CComPtr<IDispatch> disp_doc;
 	if(FAILED(m_pWeb->get_Document(&disp_doc))) {
 		return	false;
